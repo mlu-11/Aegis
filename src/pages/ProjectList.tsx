@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+//import React, { useEffect, useState } from 'react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router";
 import {
   Container,
   Typography,
@@ -7,26 +8,30 @@ import {
   Box,
   Snackbar,
   Alert,
-} from '@mui/material';
-import { Add } from '@mui/icons-material';
-import { useProjectStore } from '../stores/projectStore';
-import { useUserStore } from '../stores/userStore';
-import { useIssueStore } from '../stores/issueStore';
-import { useSprintStore } from '../stores/sprintStore';
-import { useBPMNStore } from '../stores/bpmnStore';
-import { initializeData } from '../data/mockData';
-import ProjectCard from '../components/ProjectCard';
-import ProjectForm from '../components/ProjectForm';
-import DeleteConfirmDialog from '../components/DeleteConfirmDialog';
-import type { Project } from '../types';
+} from "@mui/material";
+import { Add } from "@mui/icons-material";
+import { useProjectStore } from "../stores/projectStore";
+import { useUserStore } from "../stores/userStore";
+import { useIssueStore } from "../stores/issueStore";
+import { useSprintStore } from "../stores/sprintStore";
+import { useBPMNStore } from "../stores/bpmnStore";
+import { initializeData } from "../data/mockData";
+import ProjectCard from "../components/ProjectCard";
+import ProjectForm from "../components/ProjectForm";
+import DeleteConfirmDialog from "../components/DeleteConfirmDialog";
+import type { Project } from "../types";
 
 const ProjectList: React.FC = () => {
   const navigate = useNavigate();
-  const { projects, addProject, updateProject, deleteProject } = useProjectStore();
-  const { addUser } = useUserStore();
-  const { addIssue, issues, deleteIssue } = useIssueStore();
-  const { addSprint, sprints, deleteSprint } = useSprintStore();
-  const { addDiagram, addElement, updateElementStatus } = useBPMNStore();
+  const { projects, addProject, updateProject, deleteProject } =
+    useProjectStore();
+  // const { addUser } = useUserStore();
+  // const { addIssue, issues, deleteIssue } = useIssueStore();
+  // const { addSprint, sprints, deleteSprint } = useSprintStore();
+  // const { addDiagram, addElement, updateElementStatus } = useBPMNStore();
+
+  const { issues, deleteIssue } = useIssueStore();
+  const { sprints, deleteSprint } = useSprintStore();
 
   const [isProjectFormOpen, setIsProjectFormOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -34,79 +39,88 @@ const ProjectList: React.FC = () => {
   const [snackbar, setSnackbar] = useState<{
     open: boolean;
     message: string;
-    severity: 'success' | 'error' | 'info';
-  }>({ open: false, message: '', severity: 'success' });
+    severity: "success" | "error" | "info";
+  }>({ open: false, message: "", severity: "success" });
 
-  useEffect(() => {
-    if (projects.length === 0) {
-      const mockData = initializeData();
+  // useEffect(() => {
+  //   if (projects.length === 0) {
+  //     const mockData = initializeData();
 
-      mockData.users.forEach(addUser);
+  //     mockData.users.forEach(addUser);
 
-      mockData.projects.forEach((project) => {
-        addProject({
-          name: project.name,
-          description: project.description,
-          ownerId: project.ownerId,
-          memberIds: project.memberIds,
-        });
-      });
+  //     mockData.projects.forEach((project) => {
+  //       addProject({
+  //         name: project.name,
+  //         description: project.description,
+  //         ownerId: project.ownerId,
+  //         memberIds: project.memberIds,
+  //       });
+  //     });
 
-      mockData.issues.forEach((issue) => {
-        addIssue({
-          title: issue.title,
-          description: issue.description,
-          type: issue.type,
-          status: issue.status,
-          priority: issue.priority,
-          assigneeId: issue.assigneeId,
-          reporterId: issue.reporterId,
-          projectId: issue.projectId,
-          sprintId: issue.sprintId,
-          estimatedHours: issue.estimatedHours,
-        });
-      });
+  //     mockData.issues.forEach((issue) => {
+  //       addIssue({
+  //         title: issue.title,
+  //         description: issue.description,
+  //         type: issue.type,
+  //         status: issue.status,
+  //         priority: issue.priority,
+  //         assigneeId: issue.assigneeId,
+  //         reporterId: issue.reporterId,
+  //         projectId: issue.projectId,
+  //         sprintId: issue.sprintId,
+  //         estimatedHours: issue.estimatedHours,
+  //       });
+  //     });
 
-      mockData.sprints.forEach((sprint) => {
-        addSprint({
-          name: sprint.name,
-          description: sprint.description,
-          startDate: sprint.startDate,
-          endDate: sprint.endDate,
-          projectId: sprint.projectId,
-          issueIds: sprint.issueIds,
-          status: sprint.status,
-        });
-      });
+  //     mockData.sprints.forEach((sprint) => {
+  //       addSprint({
+  //         name: sprint.name,
+  //         description: sprint.description,
+  //         startDate: sprint.startDate,
+  //         endDate: sprint.endDate,
+  //         projectId: sprint.projectId,
+  //         issueIds: sprint.issueIds,
+  //         status: sprint.status,
+  //       });
+  //     });
 
-      mockData.bpmnDiagrams.forEach((diagram) => {
-        addDiagram({
-          name: diagram.name,
-          description: diagram.description,
-          projectId: diagram.projectId,
-          xml: diagram.xml,
-        });
-      });
+  //     mockData.bpmnDiagrams.forEach((diagram) => {
+  //       addDiagram({
+  //         name: diagram.name,
+  //         description: diagram.description,
+  //         projectId: diagram.projectId,
+  //         xml: diagram.xml,
+  //       });
+  //     });
 
-      mockData.bpmnElements.forEach((element) => {
-        addElement({
-          diagramId: element.diagramId,
-          elementId: element.elementId,
-          type: element.type,
-          name: element.name,
-          linkedIssueIds: element.linkedIssueIds,
-        });
-      });
+  //     mockData.bpmnElements.forEach((element) => {
+  //       addElement({
+  //         diagramId: element.diagramId,
+  //         elementId: element.elementId,
+  //         type: element.type,
+  //         name: element.name,
+  //         linkedIssueIds: element.linkedIssueIds,
+  //       });
+  //     });
 
-      mockData.bpmnElementStatuses.forEach((status) => {
-        updateElementStatus(status.elementId, {
-          status: status.status,
-          progress: status.progress,
-          lastUpdated: status.lastUpdated,
-        });
-      });
-    }
-  }, [projects.length, addProject, addUser, addIssue, addSprint, addDiagram, addElement, updateElementStatus]);
+  //     mockData.bpmnElementStatuses.forEach((status) => {
+  //       updateElementStatus(status.elementId, {
+  //         status: status.status,
+  //         progress: status.progress,
+  //         lastUpdated: status.lastUpdated,
+  //       });
+  //     });
+  //   }
+  // }, [
+  //   projects.length,
+  //   addProject,
+  //   addUser,
+  //   addIssue,
+  //   addSprint,
+  //   addDiagram,
+  //   addElement,
+  //   updateElementStatus,
+  // ]);
 
   const handleProjectClick = (projectId: string) => {
     navigate(`/project/${projectId}/board`);
@@ -126,7 +140,9 @@ const ProjectList: React.FC = () => {
     setDeletingProject(project);
   };
 
-  const handleProjectFormSubmit = (projectData: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const handleProjectFormSubmit = (
+    projectData: Omit<Project, "id" | "createdAt" | "updatedAt">
+  ) => {
     try {
       const memberIds = [...projectData.memberIds];
       if (!memberIds.includes(projectData.ownerId)) {
@@ -140,13 +156,13 @@ const ProjectList: React.FC = () => {
 
       if (editingProject) {
         updateProject(editingProject.id, finalProjectData);
-        showSnackbar('Project updated successfully!', 'success');
+        showSnackbar("Project updated successfully!", "success");
       } else {
         addProject(finalProjectData);
-        showSnackbar('Project created successfully!', 'success');
+        showSnackbar("Project created successfully!", "success");
       }
     } catch (error) {
-      showSnackbar('An error occurred. Please try again.', 'error');
+      showSnackbar("An error occurred. Please try again.", "error");
     }
   };
 
@@ -155,14 +171,18 @@ const ProjectList: React.FC = () => {
       try {
         const projectId = deletingProject.id;
 
-        const relatedIssues = issues.filter(issue => issue.projectId === projectId);
-        const relatedSprints = sprints.filter(sprint => sprint.projectId === projectId);
+        const relatedIssues = issues.filter(
+          (issue) => issue.projectId === projectId
+        );
+        const relatedSprints = sprints.filter(
+          (sprint) => sprint.projectId === projectId
+        );
 
-        relatedIssues.forEach(issue => {
+        relatedIssues.forEach((issue) => {
           deleteIssue(issue.id);
         });
 
-        relatedSprints.forEach(sprint => {
+        relatedSprints.forEach((sprint) => {
           deleteSprint(sprint.id);
         });
 
@@ -170,15 +190,18 @@ const ProjectList: React.FC = () => {
 
         showSnackbar(
           `Project "${deletingProject.name}" and ${relatedIssues.length} issues, ${relatedSprints.length} sprints deleted successfully!`,
-          'success'
+          "success"
         );
       } catch (error) {
-        showSnackbar('An error occurred while deleting the project.', 'error');
+        showSnackbar("An error occurred while deleting the project.", "error");
       }
     }
   };
 
-  const showSnackbar = (message: string, severity: 'success' | 'error' | 'info') => {
+  const showSnackbar = (
+    message: string,
+    severity: "success" | "error" | "info"
+  ) => {
     setSnackbar({ open: true, message, severity });
   };
 
@@ -238,7 +261,7 @@ const ProjectList: React.FC = () => {
         onClose={() => setIsProjectFormOpen(false)}
         onSubmit={handleProjectFormSubmit}
         initialData={editingProject}
-        mode={editingProject ? 'edit' : 'create'}
+        mode={editingProject ? "edit" : "create"}
       />
 
       {/* 删除确认对话框 */}
@@ -249,9 +272,13 @@ const ProjectList: React.FC = () => {
         title="Delete Project"
         message={`Are you sure you want to delete "${deletingProject?.name}"?`}
         warningMessage={
-          deletingProject ?
-            `This will permanently delete ${issues.filter(i => i.projectId === deletingProject.id).length} issues and ${sprints.filter(s => s.projectId === deletingProject.id).length} sprints.` :
-            "All associated issues, sprints, and data will be permanently lost."
+          deletingProject
+            ? `This will permanently delete ${
+                issues.filter((i) => i.projectId === deletingProject.id).length
+              } issues and ${
+                sprints.filter((s) => s.projectId === deletingProject.id).length
+              } sprints.`
+            : "All associated issues, sprints, and data will be permanently lost."
         }
       />
 
@@ -260,7 +287,7 @@ const ProjectList: React.FC = () => {
         open={snackbar.open}
         autoHideDuration={4000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
         <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
           {snackbar.message}
