@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import {
   Container,
@@ -10,11 +10,8 @@ import {
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { useProjectStore } from '../stores/projectStore';
-import { useUserStore } from '../stores/userStore';
 import { useIssueStore } from '../stores/issueStore';
 import { useSprintStore } from '../stores/sprintStore';
-import { useBPMNStore } from '../stores/bpmnStore';
-import { initializeData } from '../data/mockData';
 import ProjectCard from '../components/ProjectCard';
 import ProjectForm from '../components/ProjectForm';
 import DeleteConfirmDialog from '../components/DeleteConfirmDialog';
@@ -23,10 +20,8 @@ import type { Project } from '../types';
 const ProjectList: React.FC = () => {
   const navigate = useNavigate();
   const { projects, addProject, updateProject, deleteProject } = useProjectStore();
-  const { addUser } = useUserStore();
-  const { addIssue, issues, deleteIssue } = useIssueStore();
-  const { addSprint, sprints, deleteSprint } = useSprintStore();
-  const { addDiagram, addElement, updateElementStatus } = useBPMNStore();
+  const { issues, deleteIssue } = useIssueStore();
+  const { sprints, deleteSprint } = useSprintStore();
 
   const [isProjectFormOpen, setIsProjectFormOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -37,76 +32,7 @@ const ProjectList: React.FC = () => {
     severity: 'success' | 'error' | 'info';
   }>({ open: false, message: '', severity: 'success' });
 
-  useEffect(() => {
-    if (projects.length === 0) {
-      const mockData = initializeData();
-
-      mockData.users.forEach(addUser);
-
-      mockData.projects.forEach((project) => {
-        addProject({
-          name: project.name,
-          description: project.description,
-          ownerId: project.ownerId,
-          memberIds: project.memberIds,
-        });
-      });
-
-      mockData.issues.forEach((issue) => {
-        addIssue({
-          title: issue.title,
-          description: issue.description,
-          type: issue.type,
-          status: issue.status,
-          priority: issue.priority,
-          assigneeId: issue.assigneeId,
-          reporterId: issue.reporterId,
-          projectId: issue.projectId,
-          sprintId: issue.sprintId,
-          estimatedHours: issue.estimatedHours,
-        });
-      });
-
-      mockData.sprints.forEach((sprint) => {
-        addSprint({
-          name: sprint.name,
-          description: sprint.description,
-          startDate: sprint.startDate,
-          endDate: sprint.endDate,
-          projectId: sprint.projectId,
-          issueIds: sprint.issueIds,
-          status: sprint.status,
-        });
-      });
-
-      mockData.bpmnDiagrams.forEach((diagram) => {
-        addDiagram({
-          name: diagram.name,
-          description: diagram.description,
-          projectId: diagram.projectId,
-          xml: diagram.xml,
-        });
-      });
-
-      mockData.bpmnElements.forEach((element) => {
-        addElement({
-          diagramId: element.diagramId,
-          elementId: element.elementId,
-          type: element.type,
-          name: element.name,
-          linkedIssueIds: element.linkedIssueIds,
-        });
-      });
-
-      mockData.bpmnElementStatuses.forEach((status) => {
-        updateElementStatus(status.elementId, {
-          status: status.status,
-          progress: status.progress,
-          lastUpdated: status.lastUpdated,
-        });
-      });
-    }
-  }, [projects.length, addProject, addUser, addIssue, addSprint, addDiagram, addElement, updateElementStatus]);
+  // Seeding moved to global DataInitializer to avoid duplicate/racy initialization
 
   const handleProjectClick = (projectId: string) => {
     navigate(`/project/${projectId}/board`);
