@@ -1,0 +1,87 @@
+.bpmn-container {
+  background-color: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bpmn-container canvas {
+  outline: none;
+}
+
+.bpmn-container .djs-container {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.bpmn-container .djs-palette {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.bpmn-container .djs-context-pad {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.bpmn-container .djs-element[data-element-id] .djs-visual > :is(
+  [data-element-id*="Task"],
+  [data-element-id*="UserTask"],
+  [data-element-id*="ServiceTask"],
+  [data-element-id*="ManualTask"],
+  [data-element-id*="BusinessRuleTask"],
+  [data-element-id*="ScriptTask"],
+  [data-element-id*="SendTask"],
+  [data-element-id*="ReceiveTask"]
+) {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bpmn-container .djs-element[data-element-id] .djs-visual > :is(
+  [data-element-id*="Task"],
+  [data-element-id*="UserTask"],
+  [data-element-id*="ServiceTask"],
+  [data-element-id*="ManualTask"],
+  [data-element-id*="BusinessRuleTask"],
+  [data-element-id*="ScriptTask"],
+  [data-element-id*="SendTask"],
+  [data-element-id*="ReceiveTask"]
+):hover {
+  filter: brightness(1.1);
+  stroke-width: 2px !important;
+}
+
+.bpmn-container .djs-element[data-element-id*="Task"] {
+  cursor: pointer;
+}
+
+.bpmn-container .djs-element[data-element-id*="Task"]:hover .djs-visual > * {
+  filter: brightness(1.05);
+  stroke-width: 2px !important;
+}
+
+.bpmn-element-completed {
+  fill: #e8f5e9 !important;
+  stroke: #4caf50 !important;
+}
+
+.bpmn-element-in-progress {
+  fill: #fff3e0 !important;
+  stroke: #ff9800 !important;
+}
+
+.bpmn-element-not-started {
+  fill: #f5f5f5 !important;
+  stroke: #ccc !important;
+}
+
+.bpmn-element-blocked {
+  fill: #ffebee !important;
+  stroke: #f44336 !important;
+}
